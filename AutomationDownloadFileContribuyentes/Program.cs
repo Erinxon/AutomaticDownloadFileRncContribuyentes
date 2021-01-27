@@ -22,7 +22,7 @@ namespace AutomationDownloadFileContribuyentes
             Console.WriteLine("Precione enter para darle formato al archivo");
             FormatearTxt();
             Console.Clear();
-            Console.WriteLine("Precione crear la base de datos");
+            Console.WriteLine("Precione enter crear la base de datos");
             Console.ReadKey();
             inputDataDb();
             Console.WriteLine("Base de datos actualizada con éxito.");
@@ -54,14 +54,11 @@ namespace AutomationDownloadFileContribuyentes
         {
             try
             {
-                CreateDatabse createDatabse = new CreateDatabse
-                {
-                    server = serverInput,
-                    database = databaseInput,
-                    Path = @"C:\TMP\RNC.TXT"
-                };
+                CreateDatabse createDatabse = new CreateDatabse();
+                createDatabse.server = serverInput;
+                createDatabse.database = databaseInput;
+                createDatabse.Path = @"C:\TMP\RNC.TXT";
                 createDatabse.Connection();
-
                 if (createDatabse.isConnection())
                 {
                     createDatabse.Create();
@@ -71,6 +68,7 @@ namespace AutomationDownloadFileContribuyentes
                 else
                 {
                     Console.WriteLine("Error al conectarse a la base de datos");
+                    inputDataDb();
                 }
             }
             catch (Exception ex)
@@ -103,7 +101,6 @@ namespace AutomationDownloadFileContribuyentes
                     Path = @"C:\TMP\DGII_RNC.zip",
                     directorioDestindo = @"C:\TMP\TMP"
                 };
-
                 decompressFile.Extract();
             }
             catch (Exception ex)
