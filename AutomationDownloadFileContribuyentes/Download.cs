@@ -17,12 +17,12 @@ namespace DownloadFile
             try
             {
                 WebClient webClient = new WebClient();
-                webClient.DownloadFileCompleted += (sender, e) => Console.WriteLine("Archivo descargado correctamente");
                 webClient.DownloadProgressChanged += (sender, e) =>
                 {                   
                     Console.WriteLine("Progreso: " + (e.BytesReceived / 1048576).ToString() + " MB" + " de " + (e.TotalBytesToReceive / 1048576).ToString() + " MB");
                 };
                 webClient.DownloadFileTaskAsync(new Uri(address), saveLocation).Wait();
+                Console.WriteLine("Archivo descargado correctamente");
             }
             catch (Exception ex)
             {

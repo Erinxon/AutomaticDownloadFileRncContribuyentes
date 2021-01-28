@@ -31,6 +31,7 @@ namespace DownloadFile.DB
             }
         }
 
+        
         public bool isConnection()
         {
             try
@@ -49,6 +50,7 @@ namespace DownloadFile.DB
         {
             try
             {
+                isTable();
                 String sqlCreateTable = @"create table Contribuyentes(
                                             RNC varchar(50) not null primary key,
                                             RazonSocial varchar(250) null,
@@ -72,7 +74,25 @@ namespace DownloadFile.DB
                 Create();
             }
 
-        } 
+        }
+
+        private void isTable()
+        {
+            try
+            {
+                String sqlIstable = @"IF OBJECT_ID('Contribuyentes', 'U') IS NOT NULL
+                                         DROP TABLE Contribuyentes";
+
+                SqlCommand command = new SqlCommand(sqlIstable, connection);
+                command.Connection.Open();
+                command.ExecuteReader();
+                command.Connection.Close();
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine("Ocurrio un error: " + e.Message);
+            }
+        }
 
         public void BulkInsert()
         {
@@ -103,36 +123,5 @@ namespace DownloadFile.DB
            
         }
 
-        public void DeleteTable()
-        {
-            try
-            {
-                String sqlDeteleTable = string.Format("drop table Contribuyentes");
-                SqlCommand command = new SqlCommand(sqlDeteleTable,this.connection);
-                command.Connection.Open();
-                command.ExecuteReader();
-                command.Connection.Close();
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-        }
-
-        public void DeleteData()
-        {
-            try
-            {
-                String sqlDeteleTable = string.Format("delete Contribuyentes");
-                SqlCommand command = new SqlCommand(sqlDeteleTable, this.connection);
-                command.Connection.Open();
-                command.ExecuteReader();
-                command.Connection.Close();
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-        }
     }
 }

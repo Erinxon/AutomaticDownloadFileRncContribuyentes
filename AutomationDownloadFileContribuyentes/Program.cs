@@ -3,6 +3,7 @@ using DownloadFile.DB;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 
 namespace AutomationDownloadFileContribuyentes
 {
@@ -11,23 +12,27 @@ namespace AutomationDownloadFileContribuyentes
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Precione enter para Descargar el archivo");
-            Console.ReadKey();
-            Descargar();
-            Console.Clear();
-            Console.WriteLine("Precione enter para descromprimir el archivo");
-            Console.ReadKey();
-            Descromprimir();
-            Console.Clear();
-            Console.WriteLine("Precione enter para darle formato al archivo");
-            FormatearTxt();
-            Console.Clear();
-            Console.WriteLine("Precione enter crear la base de datos");
-            Console.ReadKey();
-            inputDataDb();
-            Console.WriteLine("Base de datos actualizada con éxito.");
-            Console.ReadKey();
+            start();
+        }
 
+        static void start()
+        {
+            Console.WriteLine("Precione enter para empezar..");
+            Console.ReadKey();
+            Console.WriteLine("Descargando archivo...");           
+            Descargar();
+            Console.WriteLine("\nDescomprimiendo archivo...");
+            Descromprimir();
+            Thread.Sleep(1000);
+            Console.WriteLine("\nFormateando archivo...");
+            FormatearTxt();
+            Thread.Sleep(1000);
+            Console.WriteLine("\nCreando la base de datos.....");
+            inputDataDb();
+            Thread.Sleep(1000);
+            Console.WriteLine("\nBase de datos actualizada con éxito.\nPrecione enter para cerrar el programa.");
+            Console.ReadKey();
+            Environment.Exit(1);
         }
 
         static void inputDataDb()
@@ -63,7 +68,6 @@ namespace AutomationDownloadFileContribuyentes
                 {
                     createDatabse.Create();
                     createDatabse.BulkInsert();
-                    Console.WriteLine("Exito");
                 }
                 else
                 {
@@ -83,13 +87,24 @@ namespace AutomationDownloadFileContribuyentes
 
         static void Descargar()
         {
-            Download download = new Download
+            try
             {
-                address = "https://dgii.gov.do/app/webApps/Consultas/RNC/DGII_RNC.zip",
-                saveLocation = @"C:\TMP\DGII_RNC.zip"
-            };
+                Download download = new Download
+                {
+                    address = "https://dgii.gov.do/app/webApps/Consultas/RNC/DGII_RNC.zip",
+                    saveLocation = @"C:\TMP\DGII_RNC.zip"
+                };
 
-            download.Start();
+                download.Start();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ocurrio un error: " + ex.Message + "\nPrecione enter para volver a intentarlo");
+                Console.ReadKey();
+                Console.Clear();
+                Descargar();
+            }
+           
         }
 
         static void Descromprimir()
